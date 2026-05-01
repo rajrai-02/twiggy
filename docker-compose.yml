@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: twiggy-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: twiggy-rabbitmq
+    ports:
+      - "5672:5672"   # Message broker port
+      - "15672:15672" # Management UI port
+    restart: unless-stopped
