@@ -1,8 +1,8 @@
-# 🚀 Twiggy — Enterprise Food Delivery Platform
+# Twiggy — Enterprise Food Delivery Platform
 
 Twiggy is a subscription-based food delivery platform designed with a robust Service-Oriented Architecture (SOA). It seamlessly handles high-frequency real-time delivery tracking, persistent subscription and billing management, and AI-driven menu optimization.
 
-## 🏗 Architecture Overview
+## Architecture Overview
 
 The system strictly decouples its persistent and real-time components to achieve high scalability:
 - **Real-time Layer:** Redis (Handles fast, volatile data like GPS tracking and caching)
@@ -18,7 +18,7 @@ graph TD
     Services --> RabbitMQ((RabbitMQ))
 ```
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Framework:** React.js (Vite)
@@ -37,13 +37,13 @@ graph TD
 - **Authentication:** Passport.js (OAuth 2.0 & JWT)
 - **Email Service:** EmailJS (Password reset & confirmations)
 
-## 🔑 Key Features
+## Key Features
 - **Hybrid Authentication:** Support for traditional Email/Password and OAuth 2.0 (Google/GitHub).
 - **Multi-Role Dashboards:** Distinct dashboards for Consumers, Providers, Delivery Partners, and Admins.
 - **AI Menu Optimization:** AI-driven menu generation balancing historical ratings and ingredient costs.
 - **Real-time Tracking:** 5-second interval GPS push from Delivery Partners, cached in Redis and pushed to the client.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js (v20+)
