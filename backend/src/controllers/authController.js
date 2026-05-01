@@ -1,0 +1,162 @@
+const User = require('../models/User');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const { generateTokens, setTokenCookies } = require('../utils/generateToken');
+const { redisClient } = require('../config/redis');
+const { getChannel } = require('../config/rabbitmq');
+
+// @desc    Register a new user
+// @route   POST /api/v1/auth/register
+const register = async (req, res) => {
+  const { name, email, password, role } = req.body;
+
+  try {
+    const userExists = await User.findOne({ 'auth.email': email });
+    if (userExists) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    const salt = await bcrypt.genSalt(12);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      auth: { email, password: hashedPassword },
+      profile: { name },
+      role: role || 'user'
+    });
+
+    const { accessToken, refreshToken } = generateTokens(user._id, user.role);
+    setTokenCookies(res, accessToken, refreshToken);
+
+    res.status(201).json({
+      _id: user._id,
+      name: user.profile.name,
+      email: user.auth.email,
+      role: user.role,
+      accessToken
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Auth user & get token
+// @route   POST /api/v1/auth/login
+const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ 'auth.email': email });
+    if (!user || !user.auth.password) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.auth.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    const { accessToken, refreshToken } = generateTokens(user._id, user.role);
+    setTokenCookies(res, accessToken, refreshToken);
+
+    res.json({
+      _id: user._id,
+      name: user.profile.name,
+      email: user.auth.email,
+      role: user.role,
+      accessToken
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Logout user / clear cookie / blacklist token
+// @route   POST /api/v1/auth/logout
+const logout = async (req, res) => {
+  try {
+    const token = req.cookies.accessToken || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+    
+    if (token) {
+      // Decode token to get expiration to set TTL in Redis
+      const decoded = jwt.decode(token);
+      if (decoded && decoded.exp) {
+        const expiresIn = decoded.exp - Math.floor(Date.now() / 1000);
+        if (expiresIn > 0) {
+          // Add to blacklist
+          await redisClient.setEx(`bl_${token}`, expiresIn, 'revoked');
+        }
+      }
+    }
+
+    res.cookie('accessToken', '', { httpOnly: true, expires: new Date(0) });
+    res.cookie('refreshToken', '', { httpOnly: true, expires: new Date(0) });
+    res.status(200).json({ message: 'Logged out successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Refresh token
+// @route   POST /api/v1/auth/refresh
+const refresh = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'No refresh token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const user = await User.findById(decoded.userId);
+    
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
+
+    const { accessToken: newAccessToken, refreshToken: newRefreshToken } = generateTokens(user._id, user.role);
+    setTokenCookies(res, newAccessToken, newRefreshToken);
+
+    res.json({ accessToken: newAccessToken });
+  } catch (error) {
+    res.status(401).json({ message: 'Invalid refresh token' });
+  }
+};
+
+// @desc    Forgot Password
+// @route   POST /api/v1/auth/forgot-password
+const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ 'auth.email': email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    // Store hashed token in Redis with 15 min TTL
+    await redisClient.setEx(`pwd_reset_${email}`, 15 * 60, hashedToken);
+
+    // Publish email task to RabbitMQ
+    const channel = getChannel();
+    const payload = {
+      email,
+      resetToken, // Send plain token to user
+      name: user.profile.name
+    };
+    
+    channel.sendToQueue('email_queue', Buffer.from(JSON.stringify({
+      type: 'FORGOT_PASSWORD',
+      payload
+    })));
+
+    res.json({ message: 'Password reset link sent to email' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { register, login, logout, refresh, forgotPassword };
