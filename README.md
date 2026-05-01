@@ -12,7 +12,7 @@ The system strictly decouples its persistent and real-time components to achieve
 ```mermaid
 graph TD
     Client[React App / Vite] --> API[API Gateway / Express]
-    API --> Services[Auth | Subscription | Orders]
+    API --> Services["Auth | Subscription | Orders"]
     Services --> Mongo[(MongoDB)]
     Services --> Redis[(Redis)]
     Services --> RabbitMQ((RabbitMQ))
