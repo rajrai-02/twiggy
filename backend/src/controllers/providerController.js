@@ -1,12 +1,12 @@
 const Menu = require('../models/Menu');
 const { GoogleGenAI } = require('@google/genai');
 
-// @desc    Create or update menu for a specific date
-// @route   PUT /api/v1/provider/menu/:date
+// Create or update menu for a specific date
+// PUT /api/v1/provider/menu/:date
 const upsertMenu = async (req, res) => {
   const { date } = req.params;
   const { items, ai_generated } = req.body;
-  
+
   const targetDate = new Date(date);
   targetDate.setHours(0, 0, 0, 0);
 
@@ -22,8 +22,8 @@ const upsertMenu = async (req, res) => {
   }
 };
 
-// @desc    Get menu for a specific date
-// @route   GET /api/v1/provider/menu/:date
+// Get menu for a specific date
+// GET /api/v1/provider/menu/:date
 const getMenu = async (req, res) => {
   const { date } = req.params;
   const targetDate = new Date(date);
@@ -38,8 +38,8 @@ const getMenu = async (req, res) => {
   }
 };
 
-// @desc    Get AI menu suggestions
-// @route   POST /api/v1/provider/ai-suggest
+// Get AI menu suggestions
+// POST /api/v1/provider/ai-suggest
 const getAiSuggestion = async (req, res) => {
   const { historicalRatings, inventoryData } = req.body;
 
@@ -64,7 +64,7 @@ const getAiSuggestion = async (req, res) => {
     const aiText = response.text.trim();
     // Clean up potential markdown formatting if Gemini still returns it
     const cleanJsonString = aiText.replace(/```json/g, '').replace(/```/g, '').trim();
-    
+
     let suggestedItems;
     try {
       suggestedItems = JSON.parse(cleanJsonString);

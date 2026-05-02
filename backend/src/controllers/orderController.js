@@ -1,7 +1,7 @@
 const Order = require('../models/Order');
 
-// @desc    Skip an upcoming order
-// @route   PATCH /api/v1/orders/skip/:date
+// Skip an upcoming order
+// PATCH /api/v1/orders/skip/:date
 const skipOrder = async (req, res) => {
   const { date } = req.params;
   const targetDate = new Date(date);
@@ -30,8 +30,8 @@ const skipOrder = async (req, res) => {
   }
 };
 
-// @desc    Get user's orders
-// @route   GET /api/v1/orders
+// Get user's orders
+// GET /api/v1/orders
 const getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user_id: req.user.userId }).sort({ date: -1 });

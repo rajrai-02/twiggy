@@ -77,7 +77,7 @@ const login = async (req, res) => {
 const logout = async (req, res) => {
   try {
     const token = req.cookies.accessToken || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
-    
+
     if (token) {
       // Decode token to get expiration to set TTL in Redis
       const decoded = jwt.decode(token);
@@ -109,7 +109,7 @@ const refresh = async (req, res) => {
   try {
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
     const user = await User.findById(decoded.userId);
-    
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid token' });
     }
@@ -123,8 +123,8 @@ const refresh = async (req, res) => {
   }
 };
 
-// @desc    Forgot Password
-// @route   POST /api/v1/auth/forgot-password
+// Forgot Password
+// POST /api/v1/auth/forgot-password
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
@@ -147,7 +147,7 @@ const forgotPassword = async (req, res) => {
       resetToken, // Send plain token to user
       name: user.profile.name
     };
-    
+
     channel.sendToQueue('email_queue', Buffer.from(JSON.stringify({
       type: 'FORGOT_PASSWORD',
       payload

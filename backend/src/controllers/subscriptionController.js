@@ -1,7 +1,7 @@
 const Subscription = require('../models/Subscription');
 
-// @desc    Create a new subscription
-// @route   POST /api/v1/subscriptions
+// Create a new subscription
+// POST /api/v1/subscriptions
 const createSubscription = async (req, res) => {
   const { provider_id, plan } = req.body;
   try {
@@ -21,8 +21,8 @@ const createSubscription = async (req, res) => {
   }
 };
 
-// @desc    Get user's subscriptions
-// @route   GET /api/v1/subscriptions
+//Get user's subscriptions
+//GET /api/v1/subscriptions
 const getSubscriptions = async (req, res) => {
   try {
     const subscriptions = await Subscription.find({ user_id: req.user.userId }).populate('provider_id', 'profile.name');
@@ -32,8 +32,8 @@ const getSubscriptions = async (req, res) => {
   }
 };
 
-// @desc    Update subscription status (e.g., pause/resume)
-// @route   PATCH /api/v1/subscriptions/:id
+//Update subscription status (e.g., pause/resume)
+//PATCH /api/v1/subscriptions/:id
 const updateSubscriptionStatus = async (req, res) => {
   const { status } = req.body;
   try {
