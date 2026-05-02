@@ -13,6 +13,7 @@ require('./config/passport'); // Initialize Passport strategies
 const authRoutes = require('./routes/authRoutes');
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const providerRoutes = require('./routes/providerRoutes');
 const startOrderEngine = require('./cron/orderEngine');
 
 const app = express();
@@ -49,6 +50,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/subscriptions', subscriptionRoutes);
 app.use('/api/v1/orders', orderRoutes);
+app.use('/api/v1/provider', providerRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
