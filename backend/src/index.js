@@ -11,6 +11,9 @@ const { connectRabbitMQ } = require('./config/rabbitmq');
 require('./config/passport'); // Initialize Passport strategies
 
 const authRoutes = require('./routes/authRoutes');
+const subscriptionRoutes = require('./routes/subscriptionRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+const startOrderEngine = require('./cron/orderEngine');
 
 const app = express();
 
@@ -30,6 +33,9 @@ const initializeServices = async () => {
   await connectDB();
   await connectRedis();
   await connectRabbitMQ();
+  
+  // Start Cron Jobs
+  startOrderEngine();
 };
 
 initializeServices();
@@ -41,6 +47,8 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/subscriptions', subscriptionRoutes);
+app.use('/api/v1/orders', orderRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

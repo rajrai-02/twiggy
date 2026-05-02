@@ -10,8 +10,20 @@ const connectRabbitMQ = async () => {
     channel = await connection.createChannel();
     console.log('RabbitMQ Connected');
     
-    // Setup essential queues
-    await channel.assertQueue('orders_queue', { durable: true });
+    // Setup Dead Letter Exchange and Queue for failed jobs
+    await channel.assertExchange('dlx', 'direct', { durable: true });
+    await channel.assertQueue('dlq_orders', { durable: true });
+    await channel.bindQueue('dlq_orders', 'dlx', 'orders_dlq_routing_key');
+
+    // Setup essential queues with DLX routing
+    await channel.assertQueue('orders_queue', { 
+      durable: true,
+      arguments: {
+        'x-dead-letter-exchange': 'dlx',
+        'x-dead-letter-routing-key': 'orders_dlq_routing_key'
+      }
+    });
+    
     await channel.assertQueue('email_queue', { durable: true });
     
   } catch (error) {
