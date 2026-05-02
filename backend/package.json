@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@emailjs/nodejs": "^5.0.2",
     "@google/genai": "^1.51.0",
     "amqplib": "^1.0.3",
     "bcrypt": "^6.0.0",

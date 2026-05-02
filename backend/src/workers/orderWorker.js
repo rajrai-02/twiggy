@@ -1,9 +1,11 @@
 const amqp = require('amqplib');
 const Order = require('../models/Order');
 const { logError } = require('../utils/logger');
+const connectDB = require('../config/db');
 
 const startOrderWorker = async () => {
   try {
+    await connectDB();
     const amqpUrl = process.env.RABBITMQ_URL || 'amqp://localhost:5672';
     const connection = await amqp.connect(amqpUrl);
     const channel = await connection.createChannel();
