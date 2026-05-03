@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, TextField } from '@mui/material';
+import { Typography, TextField, MenuItem } from '@mui/material';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -22,8 +22,8 @@ const Login = () => {
     setError('');
     try {
       const { data } = await axiosClient.post('/auth/login', loginForm);
-      sessionStorage.setItem('user', JSON.stringify(data.user));
-      const role = data.user.role;
+      sessionStorage.setItem('user', JSON.stringify(data));
+      const role = data.role;
       if (role === 'provider') navigate('/dashboard/provider');
       else if (role === 'delivery') navigate('/dashboard/delivery');
       else navigate('/dashboard/consumer');
@@ -40,9 +40,10 @@ const Login = () => {
     setError('');
     try {
       const { data } = await axiosClient.post('/auth/register', registerForm);
-      sessionStorage.setItem('user', JSON.stringify(data.user));
-      const role = data.user.role;
+      sessionStorage.setItem('user', JSON.stringify(data));
+      const role = data.role;
       if (role === 'provider') navigate('/dashboard/provider');
+      else if (role === 'delivery') navigate('/dashboard/delivery');
       else navigate('/dashboard/consumer');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
@@ -79,13 +80,21 @@ const Login = () => {
         <div className={styles.tabBar}>
           <button
             className={`${styles.tab} ${activeTab === 'login' ? styles.tabActive : ''}`}
-            onClick={() => { setActiveTab('login'); setError(''); }}
+            onClick={() => { 
+              setActiveTab('login'); 
+              setError(''); 
+              setRegisterForm({ name: '', email: '', password: '', role: 'consumer' }); 
+            }}
           >
             Sign In
           </button>
           <button
             className={`${styles.tab} ${activeTab === 'register' ? styles.tabActive : ''}`}
-            onClick={() => { setActiveTab('register'); setError(''); }}
+            onClick={() => { 
+              setActiveTab('register'); 
+              setError(''); 
+              setLoginForm({ email: '', password: '' }); 
+            }}
           >
             Register
           </button>
@@ -94,16 +103,18 @@ const Login = () => {
         {error && <div className={`${styles.errorBox} ${shared.glassCardFlat}`}>{error}</div>}
 
         {activeTab === 'login' && (
-          <form className={styles.form} onSubmit={handleLogin}>
+          <form className={styles.form} onSubmit={handleLogin} autoComplete="off">
             <TextField
               label="Email" type="email" fullWidth required variant="outlined" size="small"
               value={loginForm.email}
               onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+              autoComplete="off"
             />
             <TextField
               label="Password" type="password" fullWidth required variant="outlined" size="small"
               value={loginForm.password}
               onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+              autoComplete="new-password"
             />
             <a className={styles.forgotLink} onClick={() => navigate('/forgot-password')}>Forgot password?</a>
             <button type="submit" className={styles.submitBtn} disabled={loading}>
@@ -118,31 +129,33 @@ const Login = () => {
         )}
 
         {activeTab === 'register' && (
-          <form className={styles.form} onSubmit={handleRegister}>
+          <form className={styles.form} onSubmit={handleRegister} autoComplete="off">
             <TextField
               label="Full Name" fullWidth required variant="outlined" size="small"
               value={registerForm.name}
               onChange={(e) => setRegisterForm({ ...registerForm, name: e.target.value })}
+              autoComplete="off"
             />
             <TextField
               label="Email" type="email" fullWidth required variant="outlined" size="small"
               value={registerForm.email}
               onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
+              autoComplete="off"
             />
             <TextField
               label="Password" type="password" fullWidth required variant="outlined" size="small"
               value={registerForm.password}
               onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
+              autoComplete="new-password"
             />
             <TextField
               select fullWidth label="I am a..." variant="outlined" size="small"
               value={registerForm.role}
               onChange={(e) => setRegisterForm({ ...registerForm, role: e.target.value })}
-              SelectProps={{ native: true }}
             >
-              <option value="consumer">Consumer (Order Tiffins)</option>
-              <option value="provider">Provider (Offer Tiffins)</option>
-              <option value="delivery">Delivery Partner</option>
+              <MenuItem value="consumer">Consumer (Order Tiffins)</MenuItem>
+              <MenuItem value="provider">Provider (Offer Tiffins)</MenuItem>
+              <MenuItem value="delivery">Delivery Partner</MenuItem>
             </TextField>
             <button type="submit" className={styles.submitBtn} disabled={loading}>
               {loading ? 'Creating Account...' : 'Create Account'}
