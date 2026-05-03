@@ -1,0 +1,246 @@
+/* ============================================================
+   Twiggy — Shared Design System
+   Reusable CSS Modules: Use these classes across all pages
+   ============================================================ */
+
+/* --- Layout Helpers --- */
+.fullPage {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background-color: #0F172A;
+}
+
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flexBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flexCol {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Typography --- */
+.gradientText {
+  background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradientTextTeal {
+  background: linear-gradient(45deg, #4ECDC4, #7EDCD6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #F8FAFC;
+  margin-bottom: 0.5rem;
+}
+
+.sectionSubtitle {
+  font-size: 1rem;
+  color: #CBD5E1;
+  line-height: 1.6;
+}
+
+/* --- Glassmorphism Cards --- */
+.glassCard {
+  background: rgba(30, 41, 59, 0.6) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+  border-radius: 16px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.glassCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+.glassCardFlat {
+  background: rgba(30, 41, 59, 0.6) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2) !important;
+  border-radius: 12px !important;
+}
+
+/* --- Buttons --- */
+.btnPrimary {
+  background: linear-gradient(45deg, #FF6B6B 30%, #FF8E8E 90%);
+  box-shadow: 0 3px 15px 2px rgba(255, 107, 107, 0.3);
+  border: none;
+  border-radius: 30px;
+  padding: 10px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 4px rgba(255, 107, 107, 0.4);
+}
+
+/* --- Background Glow Orbs --- */
+.glowOrbCoral {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255, 107, 107, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.glowOrbTeal {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(78, 205, 196, 0.12) 0%, rgba(15, 23, 42, 0) 70%);
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+/* --- Status Chips --- */
+.chipSuccess {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.chipWarning {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.chipError {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* --- Input Fields --- */
+.inputWrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* --- Divider --- */
+.dividerWithText {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #475569;
+  font-size: 0.85rem;
+  margin: 16px 0;
+}
+
+.dividerWithText::before,
+.dividerWithText::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: rgba(15, 23, 42, 0.98);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #CBD5E1;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background 0.2s ease, color 0.2s ease;
+  text-decoration: none;
+  margin-bottom: 4px;
+}
+
+.sidebarItem:hover {
+  background: rgba(255, 107, 107, 0.1);
+  color: #FF6B6B;
+}
+
+.sidebarItemActive {
+  background: rgba(255, 107, 107, 0.15);
+  color: #FF6B6B;
+}
+
+.mainContent {
+  margin-left: 260px;
+  min-height: 100vh;
+  padding: 32px;
+  background-color: #0F172A;
+}
+
+/* --- Scrollbar --- */
+.scrollable {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #1E293B #0F172A;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: #1E293B;
+  border-radius: 6px;
+}
