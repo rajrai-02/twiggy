@@ -1,222 +1,185 @@
-import React from 'react';
-import { Box, Typography, Button, Container, Card, AppBar, Toolbar } from '@mui/material';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import StarIcon from '@mui/icons-material/Star';
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import PeopleIcon from '@mui/icons-material/People';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import Navbar from '../components/Navbar/Navbar';
+import Footer from '../components/Footer/Footer';
+import styles from './LandingPage.module.css';
 
-const FloatingBadge = ({ icon, text, subtext, delay, top, left, right, bottom }) => (
-  <Box
-    component={motion.div}
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 1, scale: 1, y: [0, -10, 0] }}
-    transition={{ 
-      opacity: { delay, duration: 0.5 },
-      scale: { delay, duration: 0.5 },
-      y: { repeat: Infinity, duration: 3, ease: 'easeInOut', delay: delay }
-    }}
-    sx={{
-      position: 'absolute',
-      top, left, right, bottom,
-      zIndex: 10,
-    }}
-  >
-    <Card sx={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      p: 1.5, 
-      gap: 1.5,
-      borderRadius: '16px',
-      background: 'rgba(30, 41, 59, 0.6)',
-      backdropFilter: 'blur(12px)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      boxShadow: '0 8px 32px 0 rgba(0,0,0,0.3)',
-    }}>
-      <Box sx={{ 
-        bgcolor: 'primary.main', 
-        borderRadius: '50%', 
-        p: 1, 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        boxShadow: '0 0 15px rgba(255, 107, 107, 0.5)'
-      }}>
-        {icon}
-      </Box>
-      <Box>
-        <Typography variant="subtitle2" fontWeight="bold" sx={{ color: '#fff', lineHeight: 1.2 }}>
-          {text}
-        </Typography>
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          {subtext}
-        </Typography>
-      </Box>
-    </Card>
-  </Box>
-);
+// --- Mock data for providers section ---
+const TOP_PROVIDERS = [
+  { id: 1, name: "Anita's Home Kitchen", cuisine: 'North Indian', rating: 4.9, reviews: 842, delivery: '30–40 min', tag: 'Pure Veg', subscribers: '1.2k', img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=400&q=80' },
+  { id: 2, name: "Meera's Tiffin Centre", cuisine: 'South Indian', rating: 4.8, reviews: 623, delivery: '25–35 min', tag: 'Healthy', subscribers: '980', img: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&q=80' },
+  { id: 3, name: "Sharma Dabbawala", cuisine: 'Rajasthani', rating: 4.7, reviews: 511, delivery: '35–45 min', tag: 'Popular', subscribers: '750', img: 'https://images.unsplash.com/photo-1567337710282-00832b415979?w=400&q=80' },
+  { id: 4, name: "Priya's Rasoi", cuisine: 'Punjabi Homestyle', rating: 4.9, reviews: 1100, delivery: '20–30 min', tag: '🔥 Trending', subscribers: '2.1k', img: 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=400&q=80' },
+];
+
+const STEPS = [
+  { icon: <PeopleIcon sx={{ fontSize: 28 }} />, title: 'Choose Your Chef', desc: 'Browse verified home chefs near you, filtered by cuisine and diet preferences.' },
+  { icon: <AutoAwesomeIcon sx={{ fontSize: 28 }} />, title: 'AI Curates Your Menu', desc: 'Our AI learns your taste and auto-suggests a balanced daily tiffin menu.' },
+  { icon: <LocalShippingIcon sx={{ fontSize: 28 }} />, title: 'Fresh Delivery Daily', desc: 'Hot, freshly made tiffin delivered at your door — skip or pause anytime.' },
+];
+
+const FadeIn = ({ children, delay = 0, direction = 'up' }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const variants = {
+    hidden: { opacity: 0, y: direction === 'up' ? 40 : 0, x: direction === 'left' ? -40 : direction === 'right' ? 40 : 0 },
+    visible: { opacity: 1, y: 0, x: 0 },
+  };
+  return (
+    <motion.div ref={ref} variants={variants} initial="hidden" animate={inView ? 'visible' : 'hidden'}
+      transition={{ duration: 0.6, delay, ease: 'easeOut' }}>
+      {children}
+    </motion.div>
+  );
+};
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden', bgcolor: 'background.default' }}>
-      
-      {/* Navbar / Logo */}
-      <AppBar position="absolute" elevation={0} sx={{ background: 'transparent', zIndex: 10 }}>
-        <Toolbar sx={{ justifyContent: 'space-between', pt: 2, px: { xs: 2, md: 8 } }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <RestaurantMenuIcon sx={{ color: '#FF6B6B', fontSize: 32 }} />
-            <Typography variant="h4" fontWeight="800" sx={{ color: '#fff', letterSpacing: '-1px' }}>
-              Twiggy<span style={{ color: '#FF6B6B' }}>.</span>
-            </Typography>
-          </Box>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            <Button sx={{ color: 'text.secondary', mr: 3, fontWeight: 600, '&:hover': { color: '#fff' } }}>For Providers</Button>
-            <Button sx={{ color: 'text.secondary', mr: 3, fontWeight: 600, '&:hover': { color: '#fff' } }}>For Riders</Button>
-            <Button variant="outlined" color="primary" onClick={() => navigate('/login')} sx={{ borderRadius: '20px', borderWidth: 2, '&:hover': { borderWidth: 2 } }}>
-              Sign In
-            </Button>
-          </Box>
-        </Toolbar>
-      </AppBar>
-      
-      {/* Subtle Background Glow */}
-      <Box sx={{
-        position: 'absolute',
-        top: '20%',
-        right: '10%',
-        width: '600px',
-        height: '600px',
-        background: 'radial-gradient(circle, rgba(255,107,107,0.15) 0%, rgba(15,23,42,0) 70%)',
-        borderRadius: '50%',
-        zIndex: 0,
-        filter: 'blur(40px)',
-      }} />
-      <Box sx={{
-        position: 'absolute',
-        bottom: '-10%',
-        left: '-10%',
-        width: '500px',
-        height: '500px',
-        background: 'radial-gradient(circle, rgba(78,205,196,0.1) 0%, rgba(15,23,42,0) 70%)',
-        borderRadius: '50%',
-        zIndex: 0,
-        filter: 'blur(40px)',
-      }} />
+    <div className={styles.page}>
+      <Navbar />
 
-      <Container maxWidth="lg" sx={{ height: '100vh', pt: 16, pb: 4, position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center' }}>
-        <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between', gap: 4 }}>
-          
-          {/* Left Text Content */}
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <Typography variant="h1" sx={{ color: 'text.primary', mb: 2, fontSize: { xs: '2.5rem', sm: '3rem', md: '4.5rem' }, lineHeight: 1.1 }}>
-                Homestyle Tiffins,<br />
-                <span style={{ background: 'linear-gradient(45deg, #FF6B6B, #FF8E8E)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                  AI-Curated
-                </span> Taste.
-              </Typography>
-            </motion.div>
+      {/* ─── HERO ─── */}
+      <section className={styles.hero}>
+        <div className={styles.heroBg} />
+        <div className={styles.heroBgGreen} />
 
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <Typography variant="h6" sx={{ color: 'text.secondary', mb: 4, maxWidth: '500px', lineHeight: 1.5, fontSize: { xs: '1rem', md: '1.25rem' }, fontWeight: 400 }}>
-                Twiggy curates authentic, daily tiffin subscriptions from top local home-chefs. Hot, fresh, and intelligently personalized to your diet. No thinking, just eating.
-              </Typography>
-            </motion.div>
+        <div className={styles.heroContent}>
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+            <div className={styles.heroBadge}>
+              <AutoAwesomeIcon sx={{ fontSize: 14, color: '#F97316' }} />
+              AI-Powered Tiffin Subscriptions
+            </div>
+            <h1 className={styles.heroTitle}>
+              Homestyle Food,<br />
+              <span className={styles.heroAccent}>Zero Compromise.</span>
+            </h1>
+            <p className={styles.heroSubtitle}>
+              Twiggy connects you with top local home chefs. Get a fresh, healthy tiffin every day — curated by AI, made with love.
+            </p>
+          </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                <Button 
-                  variant="contained" 
-                  color="primary" 
-                  size="large"
-                  onClick={() => navigate('/login')}
-                  sx={{ fontSize: '1.1rem', px: 4, py: 1.5, borderRadius: '30px' }}
-                >
-                  Subscribe Now
-                </Button>
-                <Button 
-                  variant="outlined" 
-                  color="secondary" 
-                  size="large"
-                  startIcon={<RestaurantMenuIcon />}
-                  sx={{ fontSize: '1.1rem', px: 4, py: 1.5, borderWidth: 2, borderRadius: '30px', '&:hover': { borderWidth: 2 } }}
-                >
-                  View AI Menu
-                </Button>
-              </Box>
-            </motion.div>
-          </Box>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
+            className={styles.heroCtas}>
+            <button className={styles.btnPrimary} onClick={() => navigate('/login')}>
+              Subscribe Now
+            </button>
+            <button className={styles.btnSecondary} onClick={() => navigate('/login')}>
+              Explore Chefs
+            </button>
+          </motion.div>
 
-          {/* Right Image Content */}
-          <Box sx={{ flex: 1, position: 'relative', height: { xs: '300px', sm: '400px', md: '600px' }, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Box sx={{ position: 'relative', width: '100%', maxWidth: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              
-              {/* Floating Main Hero Food Image */}
-              <Box
-                component={motion.img}
-                src="/hero_food.png"
-                alt="Gourmet Burger"
-                initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                animate={{ 
-                  opacity: 1, 
-                  scale: 1, 
-                  rotate: 0,
-                  y: [0, -20, 0] // Floating effect
-                }}
-                transition={{ 
-                  opacity: { duration: 1 },
-                  scale: { duration: 1 },
-                  rotate: { duration: 1 },
-                  y: { repeat: Infinity, duration: 4, ease: "easeInOut" } 
-                }}
-                sx={{
-                  width: '100%',
-                  height: 'auto',
-                  objectFit: 'contain',
-                  zIndex: 2,
-                  mixBlendMode: 'lighten', // Blends the dark image background perfectly with the page
-                  filter: 'drop-shadow(0px 20px 30px rgba(0,0,0,0.5))'
-                }}
-              />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.5 }}
+            className={styles.heroStats}>
+            <div className={styles.stat}><span className={styles.statNum}>12k+</span><span className={styles.statLabel}>Happy Subscribers</span></div>
+            <div className={styles.statDivider} />
+            <div className={styles.stat}><span className={styles.statNum}>350+</span><span className={styles.statLabel}>Home Chefs</span></div>
+            <div className={styles.statDivider} />
+            <div className={styles.stat}><span className={styles.statNum}>4.9★</span><span className={styles.statLabel}>Avg Rating</span></div>
+          </motion.div>
+        </div>
 
-              {/* Floating Badges */}
-              <FloatingBadge 
-                icon={<StarIcon sx={{ color: '#fff' }} />} 
-                text="4.9/5 Rating" 
-                subtext="Top Rated Chefs"
-                top="10%" 
-                left="-10%" 
-                delay={0.6}
-              />
-              
-              <FloatingBadge 
-                icon={<LocalShippingIcon sx={{ color: '#fff' }} />} 
-                text="Live Tracking" 
-                subtext="Powered by Redis"
-                bottom="10%" 
-                right="-10%" 
-                delay={0.8}
-              />
-            </Box>
-          </Box>
+        {/* Hero Image */}
+        <motion.div className={styles.heroImageWrap}
+          initial={{ opacity: 0, scale: 0.9, x: 40 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}>
+          <div className={styles.heroImageGlow} />
+          <motion.img
+            src="/hero_tiffin.png"
+            alt="Fresh Indian Tiffin"
+            className={styles.heroImage}
+            animate={{ y: [0, -14, 0] }}
+            transition={{ repeat: Infinity, duration: 4.5, ease: 'easeInOut' }}
+          />
+          <div className={styles.floatingBadge} style={{ top: '12%', left: '-8%' }}>
+            <div className={styles.badgeIcon}><StarIcon sx={{ fontSize: 16, color: '#FBBF24' }} /></div>
+            <div><div className={styles.badgeTitle}>Top Rated</div><div className={styles.badgeSub}>4.9 / 5 stars</div></div>
+          </div>
+          <div className={styles.floatingBadge} style={{ bottom: '18%', right: '-10%' }}>
+            <div className={styles.badgeIcon} style={{ background: 'rgba(22,163,74,0.2)' }}><LocalShippingIcon sx={{ fontSize: 16, color: '#22C55E' }} /></div>
+            <div><div className={styles.badgeTitle}>Live Tracking</div><div className={styles.badgeSub}>Real-time GPS</div></div>
+          </div>
+        </motion.div>
+      </section>
 
-        </Box>
-      </Container>
-    </Box>
+      {/* ─── HOW IT WORKS ─── */}
+      <section className={styles.section}>
+        <FadeIn>
+          <div className={styles.sectionTag}>Simple as 1-2-3</div>
+          <h2 className={styles.sectionTitle}>How Twiggy Works</h2>
+        </FadeIn>
+        <div className={styles.stepsGrid}>
+          {STEPS.map((step, i) => (
+            <FadeIn key={i} delay={i * 0.15} direction="up">
+              <div className={styles.stepCard}>
+                <div className={styles.stepNum}>{String(i + 1).padStart(2, '0')}</div>
+                <div className={styles.stepIcon}>{step.icon}</div>
+                <h3 className={styles.stepTitle}>{step.title}</h3>
+                <p className={styles.stepDesc}>{step.desc}</p>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── TOP PROVIDERS ─── */}
+      <section className={styles.section}>
+        <FadeIn>
+          <div className={styles.sectionTag}>Curated for You</div>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Top-Rated Chefs Near You</h2>
+            <button className={styles.seeAll} onClick={() => navigate('/login')}>See all chefs →</button>
+          </div>
+        </FadeIn>
+        <div className={styles.providerGrid}>
+          {TOP_PROVIDERS.map((p, i) => (
+            <FadeIn key={p.id} delay={i * 0.1} direction="up">
+              <div className={styles.providerCard} onClick={() => navigate('/login')}>
+                <div className={styles.providerImgWrap}>
+                  <img src={p.img} alt={p.name} className={styles.providerImg} />
+                  <div className={styles.providerTag}>{p.tag}</div>
+                </div>
+                <div className={styles.providerBody}>
+                  <div className={styles.providerTop}>
+                    <div>
+                      <div className={styles.providerName}>{p.name}</div>
+                      <div className={styles.providerCuisine}>{p.cuisine}</div>
+                    </div>
+                    <div className={styles.ratingBadge}>
+                      <StarIcon sx={{ fontSize: 12, color: '#FBBF24' }} />
+                      {p.rating}
+                    </div>
+                  </div>
+                  <div className={styles.providerMeta}>
+                    <span><AccessTimeIcon sx={{ fontSize: 12 }} /> {p.delivery}</span>
+                    <span><PeopleIcon sx={{ fontSize: 12 }} /> {p.subscribers} subscribers</span>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── CTA BANNER ─── */}
+      <section className={styles.ctaBanner}>
+        <FadeIn>
+          <h2 className={styles.ctaTitle}>Ready to eat better, every day?</h2>
+          <p className={styles.ctaSubtitle}>Join thousands of happy subscribers. Cancel or pause anytime.</p>
+          <button className={styles.btnPrimary} onClick={() => navigate('/login')}>Start Your Subscription</button>
+        </FadeIn>
+      </section>
+
+      <Footer />
+    </div>
   );
 };
 

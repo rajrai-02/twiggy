@@ -59,8 +59,8 @@ const Login = () => {
     <div className={styles.page}>
 
 
-      <div className={`${shared.glowOrbCoral}`} style={{ top: '10%', right: '15%' }} />
-      <div className={`${shared.glowOrbTeal}`} style={{ bottom: '-10%', left: '-5%' }} />
+      <div className={shared.glowOrbOrange} style={{ top: '10%', right: '15%' }} />
+      <div className={shared.glowOrbGreen} style={{ bottom: '-10%', left: '-5%' }} />
 
       <motion.div
         className={`${shared.glassCard} ${styles.card}`}
