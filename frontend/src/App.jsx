@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-// Pages (We will create these soon)
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login/Login';
 // import ConsumerDashboard from './pages/ConsumerDashboard';

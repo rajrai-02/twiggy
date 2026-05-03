@@ -1,7 +1,7 @@
 const { redisClient } = require('../config/redis');
 
-// @desc    Update delivery partner GPS location
-// @route   POST /api/v1/delivery/gps
+//   Update delivery partner GPS location
+//   POST /api/v1/delivery/gps
 const updateLocation = async (req, res) => {
   const { lat, lng, orderId } = req.body;
   const deliveryPartnerId = req.user.userId;
@@ -20,9 +20,6 @@ const updateLocation = async (req, res) => {
 
     // Store in Redis hash for fast access and updates
     await redisClient.hSet('delivery_locations', deliveryPartnerId, JSON.stringify(locationData));
-    
-    // Optional: Also add to a geospatial index if you need radius queries later
-    // await redisClient.geoAdd('delivery_geo', { longitude: lng, latitude: lat, member: deliveryPartnerId });
 
     res.json({ message: 'Location updated', data: locationData });
   } catch (error) {
@@ -30,14 +27,14 @@ const updateLocation = async (req, res) => {
   }
 };
 
-// @desc    Get live delivery partner location (for consumer app)
-// @route   GET /api/v1/delivery/gps/:partnerId
+//    Get live delivery partner location (for consumer app)
+//   GET /api/v1/delivery/gps/:partnerId
 const getLocation = async (req, res) => {
   const { partnerId } = req.params;
 
   try {
     const rawData = await redisClient.hGet('delivery_locations', partnerId);
-    
+
     if (!rawData) {
       return res.status(404).json({ message: 'Location not found or offline' });
     }

@@ -9,7 +9,7 @@ import shared from '../../styles/shared.module.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('login'); // 'login' | 'register'
+  const [activeTab, setActiveTab] = useState('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -21,8 +21,6 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      // Backend sets HTTP-only access/refresh token cookies automatically.
-      // We only store the non-sensitive user profile for client-side routing.
       const { data } = await axiosClient.post('/auth/login', loginForm);
       sessionStorage.setItem('user', JSON.stringify(data.user));
       const role = data.user.role;
@@ -60,7 +58,7 @@ const Login = () => {
   return (
     <div className={styles.page}>
 
-      {/* Background Glow Orbs */}
+
       <div className={`${shared.glowOrbCoral}`} style={{ top: '10%', right: '15%' }} />
       <div className={`${shared.glowOrbTeal}`} style={{ bottom: '-10%', left: '-5%' }} />
 
@@ -70,7 +68,7 @@ const Login = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Logo */}
+
         <div className={styles.logo}>
           <RestaurantMenuIcon sx={{ color: '#FF6B6B', fontSize: 30 }} />
           <Typography variant="h5" fontWeight="800" sx={{ color: '#fff', letterSpacing: '-0.5px' }}>
@@ -78,7 +76,6 @@ const Login = () => {
           </Typography>
         </div>
 
-        {/* Tab Bar */}
         <div className={styles.tabBar}>
           <button
             className={`${styles.tab} ${activeTab === 'login' ? styles.tabActive : ''}`}
@@ -94,10 +91,8 @@ const Login = () => {
           </button>
         </div>
 
-        {/* Error Message */}
         {error && <div className={`${styles.errorBox} ${shared.glassCardFlat}`}>{error}</div>}
 
-        {/* Login Form */}
         {activeTab === 'login' && (
           <form className={styles.form} onSubmit={handleLogin}>
             <TextField
@@ -122,7 +117,6 @@ const Login = () => {
           </form>
         )}
 
-        {/* Register Form */}
         {activeTab === 'register' && (
           <form className={styles.form} onSubmit={handleRegister}>
             <TextField
