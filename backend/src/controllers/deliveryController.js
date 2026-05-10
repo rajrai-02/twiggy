@@ -1,4 +1,5 @@
 const { redisClient } = require('../config/redis');
+const Order = require('../models/Order');
 
 //   Update delivery partner GPS location
 //   POST /api/v1/delivery/gps
@@ -52,4 +53,49 @@ const getLocation = async (req, res) => {
   }
 };
 
-module.exports = { updateLocation, getLocation };
+// Get Delivery Dashboard Stats
+// GET /api/v1/delivery/dashboard
+const getDashboardStats = async (req, res) => {
+  const deliveryPartnerId = req.user.userId;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  try {
+    const todayOrders = await Order.find({ delivery_partner_id: deliveryPartnerId, date: today });
+    
+    const completed = todayOrders.filter(o => o.status === 'delivered').length;
+    const pending = todayOrders.filter(o => o.status === 'pending').length;
+    
+    // Dummy distance for now
+    const distanceKm = (completed + pending) * 2.5;
+
+    res.json({
+      deliveriesToday: todayOrders.length,
+      completed,
+      pending,
+      distanceKm
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Get Today's Delivery Runs
+// GET /api/v1/delivery/runs/today
+const getTodayRuns = async (req, res) => {
+  const deliveryPartnerId = req.user.userId;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  try {
+    const orders = await Order.find({ delivery_partner_id: deliveryPartnerId, date: today, status: { $ne: 'skipped' } })
+      .populate('user_id', 'profile.name profile.address profile.phone')
+      .populate('provider_id', 'profile.businessName profile.address profile.phone');
+
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { updateLocation, getLocation, getDashboardStats, getTodayRuns };
