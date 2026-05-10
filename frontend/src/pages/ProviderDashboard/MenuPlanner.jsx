@@ -5,7 +5,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 import DashboardLayout from '../../components/DashboardLayout/DashboardLayout';
 import { 
@@ -150,7 +150,7 @@ const MenuPlanner = () => {
                       >
                         {item}
                         <button className={styles.removeItemBtn} onClick={() => handleRemoveItem(idx)}>
-                          <DeleteOutlineIcon sx={{ fontSize: 18 }} />
+                          <DeleteOutlinedIcon sx={{ fontSize: 18 }} />
                         </button>
                       </motion.div>
                     ))
