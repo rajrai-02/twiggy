@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import { useUpdateProfileMutation } from '../../store/slices/authApiSlice';
 import styles from './CompleteProfile.module.css';
 
@@ -161,7 +161,7 @@ const CompleteProfile = () => {
             {locationError && <p className={styles.errorText}>{locationError}</p>}
             {coords && !locationError && (
               <p className={styles.successText}>
-                <CheckCircleOutlineIcon sx={{ fontSize: 16 }} />
+                <CheckCircleOutlinedIcon sx={{ fontSize: 16 }} />
                 Location coordinates captured!
               </p>
             )}
