@@ -110,75 +110,81 @@ const CompleteProfile = () => {
 
   return (
     <div className={styles.container}>
-      <motion.div 
-        className={styles.card}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className={styles.header}>
-          <h1>Complete Your Profile</h1>
-          <p>We need a few more details to set up your account.</p>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <div className={styles.formGroup}>
-            <label>Phone Number</label>
-            <input 
-              type="tel" 
-              className={styles.input} 
-              placeholder="e.g. +1 234 567 8900"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
+      <div className={styles.formSection}>
+        <motion.div 
+          className={styles.card}
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className={styles.header}>
+            <h1>Complete Your Profile</h1>
+            <p>We need a few more details to set up your account.</p>
           </div>
 
-          <div className={styles.formGroup}>
-            <div className={styles.locationAction}>
-              <label>Full Address</label>
-              <button 
-                type="button" 
-                className={styles.btnLocation} 
-                onClick={handleGetLocation}
-                disabled={isLocating}
-              >
-                <LocationOnIcon sx={{ fontSize: 16 }} />
-                {isLocating ? 'Locating...' : 'Get Current Location'}
-              </button>
+          <form onSubmit={handleSubmit}>
+            <div className={styles.formGroup}>
+              <label>Phone Number</label>
+              <input 
+                type="tel" 
+                className={styles.input} 
+                placeholder="e.g. +1 234 567 8900"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
             </div>
-            <input 
-              type="text" 
-              className={styles.input} 
-              placeholder="e.g. 123 Main St, Apt 4B, City"
-              value={addressText}
-              onChange={(e) => {
-                setAddressText(e.target.value);
-                setCoords(null); // Reset coords if they type a new address
-              }}
-              required
-            />
-            {locationError && <p className={styles.errorText}>{locationError}</p>}
-            {coords && !locationError && (
-              <p className={styles.successText}>
-                <CheckCircleOutlinedIcon sx={{ fontSize: 16 }} />
-                Location coordinates captured!
-              </p>
-            )}
-            {!coords && !locationError && (
-              <p style={{ color: '#A8A29E', fontSize: '0.8rem', marginTop: 4 }}>
-                If you do not click the location button, we will attempt to find your coordinates automatically.
-              </p>
-            )}
-          </div>
 
-          {formError && <p className={styles.errorText} style={{ marginBottom: 16, textAlign: 'center' }}>{formError}</p>}
+            <div className={styles.formGroup}>
+              <div className={styles.locationAction}>
+                <label>Full Address</label>
+                <button 
+                  type="button" 
+                  className={styles.btnLocation} 
+                  onClick={handleGetLocation}
+                  disabled={isLocating}
+                >
+                  <LocationOnIcon sx={{ fontSize: 16 }} />
+                  {isLocating ? 'Locating...' : 'Get Current Location'}
+                </button>
+              </div>
+              <input 
+                type="text" 
+                className={styles.input} 
+                placeholder="e.g. 123 Main St, Apt 4B, City"
+                value={addressText}
+                onChange={(e) => {
+                  setAddressText(e.target.value);
+                  setCoords(null); // Reset coords if they type a new address
+                }}
+                required
+              />
+              {locationError && <p className={styles.errorText}>{locationError}</p>}
+              {coords && !locationError && (
+                <p className={styles.successText}>
+                  <CheckCircleOutlinedIcon sx={{ fontSize: 16 }} />
+                  Location coordinates captured!
+                </p>
+              )}
+              {!coords && !locationError && (
+                <p style={{ color: '#A8A29E', fontSize: '0.8rem', marginTop: 4 }}>
+                  If you do not click the location button, we will attempt to find your coordinates automatically.
+                </p>
+              )}
+            </div>
 
-          <button type="submit" className={styles.btnSubmit} disabled={isLoading || isLocating}>
-            {isLoading ? 'Saving...' : 'Save & Continue'}
-          </button>
-        </form>
-      </motion.div>
+            {formError && <p className={styles.errorText} style={{ marginBottom: 16, textAlign: 'center' }}>{formError}</p>}
+
+            <button type="submit" className={styles.btnSubmit} disabled={isLoading || isLocating}>
+              {isLoading ? 'Saving...' : 'Save & Continue'}
+            </button>
+          </form>
+        </motion.div>
+      </div>
+      
+      <div className={styles.imageSection}>
+        <div className={styles.imageOverlay} />
+      </div>
     </div>
   );
 };
