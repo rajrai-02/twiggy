@@ -34,7 +34,8 @@ const register = async (req, res) => {
       name: user.profile.name,
       email: user.auth.email,
       role: user.role,
-      accessToken
+      accessToken,
+      isProfileComplete: false
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -60,12 +61,15 @@ const login = async (req, res) => {
     const { accessToken, refreshToken } = generateTokens(user._id, user.role);
     setTokenCookies(res, accessToken, refreshToken);
 
+    const isProfileComplete = !!(user.profile.phone && user.address_book && user.address_book.length > 0);
+
     res.json({
       _id: user._id,
       name: user.profile.name,
       email: user.auth.email,
       role: user.role,
-      accessToken
+      accessToken,
+      isProfileComplete
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -159,4 +163,38 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-module.exports = { register, login, logout, refresh, forgotPassword };
+// Update Profile
+// PUT /api/v1/auth/profile
+const updateProfile = async (req, res) => {
+  const { phone, address_text, lat, lng } = req.body;
+  const userId = req.user.userId;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (phone) user.profile.phone = phone;
+    
+    if (address_text && lat && lng) {
+      // Overwrite the address book with the primary location for simplicity in MVP
+      user.address_book = [{
+        label: 'Home',
+        address_text,
+        coords: { lat, lng }
+      }];
+    }
+
+    await user.save();
+
+    res.json({
+      message: 'Profile updated successfully',
+      isProfileComplete: !!(user.profile.phone && user.address_book && user.address_book.length > 0)
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { register, login, logout, refresh, forgotPassword, updateProfile };

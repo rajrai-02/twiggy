@@ -7,15 +7,19 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ProviderDashboard from './pages/ProviderDashboard/ProviderDashboard';
 import DeliveryDashboard from './pages/DeliveryDashboard/DeliveryDashboard';
 import MenuPlanner from './pages/ProviderDashboard/MenuPlanner';
+import CompleteProfile from './pages/CompleteProfile/CompleteProfile';
 
 function App() {
   return (
     <Routes>
-      {/* Public */}
+      {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
 
-      {/* Consumer — protected */}
+      {/* Profile Completion */}
+      <Route path="/complete-profile" element={<ProtectedRoute><CompleteProfile /></ProtectedRoute>} />
+
+      {/* Consumer Dashboard */}
       <Route
         path="/dashboard/consumer"
         element={

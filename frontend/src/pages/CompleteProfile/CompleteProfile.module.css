@@ -1,0 +1,133 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, rgba(30,30,30,1) 0%, rgba(18,18,18,1) 100%);
+  padding: 20px;
+}
+
+.card {
+  background: rgba(25, 25, 25, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 40px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #FAFAF9;
+  margin: 0 0 8px 0;
+}
+
+.header p {
+  color: #A8A29E;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.formGroup {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formGroup label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #D6D3D1;
+}
+
+.input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 14px 16px;
+  border-radius: 12px;
+  color: #FAFAF9;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #F97316;
+}
+
+.locationAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.btnLocation {
+  background: rgba(249, 115, 22, 0.1);
+  color: #F97316;
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btnLocation:hover:not(:disabled) {
+  background: rgba(249, 115, 22, 0.2);
+}
+
+.btnLocation:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnSubmit {
+  width: 100%;
+  padding: 16px;
+  background: #F97316;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 10px;
+}
+
+.btnSubmit:hover:not(:disabled) {
+  background: #EA580C;
+}
+
+.btnSubmit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.errorText {
+  color: #EF4444;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.successText {
+  color: #10B981;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, logout, refresh, forgotPassword } = require('../controllers/authController');
+const { register, login, logout, refresh, forgotPassword, updateProfile } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const passport = require('passport');
 
@@ -9,6 +9,7 @@ router.post('/login', login);
 router.post('/logout', logout);
 router.post('/refresh', refresh);
 router.post('/forgot-password', forgotPassword);
+router.put('/profile', protect, updateProfile);
 
 // OAuth Routes
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
