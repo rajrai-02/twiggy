@@ -9,7 +9,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
         data: data,
       }),
     }),
+    getMe: builder.query({
+      query: () => '/auth/me',
+    }),
   }),
 });
 
-export const { useUpdateProfileMutation } = authApiSlice;
+export const { useUpdateProfileMutation, useGetMeQuery } = authApiSlice;

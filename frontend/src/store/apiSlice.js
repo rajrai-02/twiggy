@@ -3,9 +3,15 @@ import axiosClient from '../api/axiosClient';
 
 const axiosBaseQuery =
   () =>
-  async ({ url, method, data, params }) => {
+  async (args) => {
     try {
-      const result = await axiosClient({ url, method, data, params });
+      const config = typeof args === 'string' ? { url: args, method: 'GET' } : args;
+      const result = await axiosClient({
+        url: config.url,
+        method: config.method || 'GET',
+        data: config.data,
+        params: config.params,
+      });
       return { data: result.data };
     } catch (axiosError) {
       const err = axiosError;

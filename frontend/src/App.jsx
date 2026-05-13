@@ -8,6 +8,7 @@ import ProviderDashboard from './pages/ProviderDashboard/ProviderDashboard';
 import DeliveryDashboard from './pages/DeliveryDashboard/DeliveryDashboard';
 import MenuPlanner from './pages/ProviderDashboard/MenuPlanner';
 import CompleteProfile from './pages/CompleteProfile/CompleteProfile';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
 
       {/* Profile Completion */}
       <Route path="/complete-profile" element={<ProtectedRoute><CompleteProfile /></ProtectedRoute>} />
+
+      {/* Shared Dashboard Routes */}
+      <Route path="/dashboard/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
 
       {/* Consumer Dashboard */}
       <Route

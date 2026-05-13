@@ -13,13 +13,6 @@ import DashboardLayout from '../../components/DashboardLayout/DashboardLayout';
 import { useGetProviderDashboardStatsQuery, useGetTodayDeliveriesQuery } from '../../store/slices/providerApiSlice';
 import styles from './ProviderDashboard.module.css';
 
-const NAV_ITEMS = [
-  { label: 'Overview',      path: '/dashboard/provider',              icon: <HomeIcon sx={{ fontSize: 18 }} /> },
-  { label: 'Subscribers',   path: '/dashboard/provider/subscribers',  icon: <PeopleIcon sx={{ fontSize: 18 }} /> },
-  { label: 'Menu Planner',  path: '/dashboard/provider/menu',         icon: <RestaurantMenuIcon sx={{ fontSize: 18 }} /> },
-  { label: 'Earnings',      path: '/dashboard/provider/earnings',     icon: <AttachMoneyIcon sx={{ fontSize: 18 }} /> },
-];
-
 const SkeletonLine = ({ w = '100%', h = 16 }) => (
   <div className={styles.skeleton} style={{ width: w, height: h, marginBottom: 8 }} />
 );
@@ -33,7 +26,7 @@ const ProviderDashboard = () => {
   const { data: deliveries, isLoading: isDeliveriesLoading } = useGetTodayDeliveriesQuery();
 
   return (
-    <DashboardLayout navItems={NAV_ITEMS}>
+    <DashboardLayout>
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
         <div className={styles.header}>

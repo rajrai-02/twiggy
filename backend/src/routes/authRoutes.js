@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login, logout, refresh, forgotPassword, updateProfile } = require('../controllers/authController');
+const { register, login, logout, refresh, forgotPassword, updateProfile, getMe } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const passport = require('passport');
 
@@ -25,9 +25,7 @@ router.get('/google/callback',
   }
 );
 
-// Protected test route
-router.get('/me', protect, (req, res) => {
-  res.json({ user: req.user });
-});
+// Get current user details
+router.get('/me', protect, getMe);
 
 module.exports = router;

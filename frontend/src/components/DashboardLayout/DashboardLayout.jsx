@@ -7,9 +7,15 @@ import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import LogoutIcon from '@mui/icons-material/Logout';
 import axiosClient from '../../api/axiosClient';
+import PersonIcon from '@mui/icons-material/Person';
+import PeopleIcon from '@mui/icons-material/People';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import MapIcon from '@mui/icons-material/Map';
+import HistoryIcon from '@mui/icons-material/History';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import styles from './DashboardLayout.module.css';
 
-const DashboardLayout = ({ children, navItems }) => {
+const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,6 +34,38 @@ const DashboardLayout = ({ children, navItems }) => {
     sessionStorage.removeItem('user');
     navigate('/login');
   };
+
+  const getNavItems = () => {
+    const baseItems = [];
+    if (user.role === 'provider') {
+      baseItems.push(
+        { label: 'Overview', path: '/dashboard/provider', icon: <HomeIcon sx={{ fontSize: 18 }} /> },
+        { label: 'Subscribers', path: '/dashboard/provider/subscribers', icon: <PeopleIcon sx={{ fontSize: 18 }} /> },
+        { label: 'Menu Planner', path: '/dashboard/provider/menu', icon: <RestaurantMenuIcon sx={{ fontSize: 18 }} /> },
+        { label: 'Earnings', path: '/dashboard/provider/earnings', icon: <AttachMoneyIcon sx={{ fontSize: 18 }} /> }
+      );
+    } else if (user.role === 'delivery') {
+      baseItems.push(
+        { label: 'Overview', path: '/dashboard/delivery', icon: <DirectionsBikeIcon sx={{ fontSize: 18 }} /> },
+        { label: 'Active Run', path: '/dashboard/delivery/run', icon: <MapIcon sx={{ fontSize: 18 }} /> },
+        { label: 'History', path: '/dashboard/delivery/history', icon: <HistoryIcon sx={{ fontSize: 18 }} /> }
+      );
+    } else {
+      baseItems.push(
+        { label: 'Overview', path: '/dashboard/consumer', icon: <HomeIcon sx={{ fontSize: 18 }} /> },
+        { label: 'My Orders', path: '/dashboard/consumer/orders', icon: <ReceiptLongIcon sx={{ fontSize: 18 }} /> },
+        { label: 'Subscriptions', path: '/dashboard/consumer/subscription', icon: <SubscriptionsIcon sx={{ fontSize: 18 }} /> },
+        { label: 'Track Delivery', path: '/dashboard/consumer/track', icon: <LocalShippingIcon sx={{ fontSize: 18 }} /> }
+      );
+    }
+    
+    // Add common Account item
+    baseItems.push({ label: 'Account', path: '/dashboard/profile', icon: <PersonIcon sx={{ fontSize: 18 }} /> });
+    
+    return baseItems;
+  };
+
+  const navItems = getNavItems();
 
   return (
     <div className={styles.layout}>

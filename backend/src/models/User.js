@@ -24,7 +24,18 @@ const userSchema = new mongoose.Schema({
   profile: {
     name: { type: String, required: true },
     phone: { type: String },
-    avatar: { type: String }
+    avatar: { type: String },
+    
+    // Provider specific
+    businessName: { type: String },
+    description: { type: String },
+    
+    // Delivery specific
+    vehicleType: { type: String, enum: ['Bike', 'Scooter', 'Bicycle', 'Car'] },
+    licensePlate: { type: String },
+    
+    // Consumer specific
+    dietaryPreferences: { type: String, enum: ['Veg', 'Non-Veg', 'Vegan', 'Any'], default: 'Any' }
   },
   address_book: [addressSchema]
 }, { timestamps: true });

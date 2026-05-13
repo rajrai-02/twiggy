@@ -12,12 +12,6 @@ import DashboardLayout from '../../components/DashboardLayout/DashboardLayout';
 import { useGetDeliveryDashboardStatsQuery, useGetTodayRunsQuery } from '../../store/slices/deliveryApiSlice';
 import styles from './DeliveryDashboard.module.css';
 
-const NAV_ITEMS = [
-  { label: 'Overview',  path: '/dashboard/delivery',          icon: <DirectionsBikeIcon sx={{ fontSize: 18 }} /> },
-  { label: 'Active Run',path: '/dashboard/delivery/run',      icon: <MapIcon sx={{ fontSize: 18 }} /> },
-  { label: 'History',   path: '/dashboard/delivery/history',  icon: <HistoryIcon sx={{ fontSize: 18 }} /> },
-];
-
 const SkeletonLine = ({ w = '100%', h = 16 }) => (
   <div className={styles.skeleton} style={{ width: w, height: h, marginBottom: 8 }} />
 );
@@ -31,7 +25,7 @@ const DeliveryDashboard = () => {
   const { data: runs, isLoading: isRunsLoading } = useGetTodayRunsQuery();
 
   return (
-    <DashboardLayout navItems={NAV_ITEMS}>
+    <DashboardLayout>
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
         <div className={styles.header}>

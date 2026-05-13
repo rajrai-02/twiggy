@@ -13,13 +13,6 @@ import axiosClient from '../../api/axiosClient';
 import DashboardLayout from '../../components/DashboardLayout/DashboardLayout';
 import styles from './ConsumerDashboard.module.css';
 
-const NAV_ITEMS = [
-  { label: 'Overview',      path: '/dashboard/consumer',              icon: <HomeIcon sx={{ fontSize: 18 }} /> },
-  { label: 'My Orders',     path: '/dashboard/consumer/orders',       icon: <ReceiptLongIcon sx={{ fontSize: 18 }} /> },
-  { label: 'Subscriptions', path: '/dashboard/consumer/subscription', icon: <SubscriptionsIcon sx={{ fontSize: 18 }} /> },
-  { label: 'Track Delivery',path: '/dashboard/consumer/track',        icon: <LocalShippingIcon sx={{ fontSize: 18 }} /> },
-];
-
 const formatDate = (iso) => {
   const d = new Date(iso);
   return d.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
@@ -101,7 +94,7 @@ const ConsumerDashboard = () => {
   );
 
   return (
-    <DashboardLayout navItems={NAV_ITEMS}>
+    <DashboardLayout>
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
         <div className={styles.header}>
